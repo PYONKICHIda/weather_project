@@ -1,6 +1,10 @@
 from django.shortcuts import render
 from .forms import CityForm
 import requests
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # .envファイルから環境変数を読み込む
 
 def index(request):
     weather_data = None
@@ -8,7 +12,7 @@ def index(request):
         form = CityForm(request.POST)
         if form.is_valid():
             city = form.cleaned_data['city']
-            api_key = '5f97aedccc4704a402e0ed69847fb2ce'
+            api_key = os.getenv('API_KEY')  # 環境変数からAPIキーを取得
             url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric'
             print(f'Request URL: {url}')  # デバッグ用
             response = requests.get(url)
