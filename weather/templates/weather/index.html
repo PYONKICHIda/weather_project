@@ -1,26 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>Weather App</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'weather/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .weather-result {
+            margin-top: 20px;
+        }
+        .weather-result p {
+            font-size: 1.2em;
+        }
+    </style>
 </head>
 <body>
-    <h1>Weather App</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Get Weather</button>
-    </form>
-    {% if weather_data %}
-        {% if weather_data.error %}
-            <p>{{ weather_data.error }}</p>
-        {% else %}
-            <h2>{{ weather_data.name }}</h2>
-            <p>Temperature: {{ weather_data.main.temp }}°C</p>
-            <p>Weather: {{ weather_data.weather.0.description }}</p>
+    <div class="container">
+        <h1 class="text-center">Weather App</h1>
+        <form method="post" class="mt-4">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.city.label_tag }}
+                {{ form.city }}
+            </div>
+            <button type="submit" class="btn btn-primary">Get Weather</button>
+        </form>
+
+        {% if weather_data %}
+            <div class="weather-result mt-4">
+                {% if weather_data.error %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ weather_data.error }}
+                    </div>
+                {% else %}
+                    <h2>{{ weather_data.name }}</h2>
+                    <p>Temperature: {{ weather_data.main.temp }}°C</p>
+                    <p>Weather: {{ weather_data.weather.0.description }}</p>
+                {% endif %}
+            </div>
         {% endif %}
-    {% endif %}
+    </div>
 </body>
 </html>
